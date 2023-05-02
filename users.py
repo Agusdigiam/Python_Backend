@@ -4,20 +4,43 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class User(BaseModel):
+    id: int
     name: str
     surname: str
     email: str
     age: int
 
 Users_list = [
-User(name="Agustin", surname="Di Giambatista",email="agus@gmail.com",age=28),
-User(name="Gian",surname="Vespa", email="Gian_Vespa@user.com", age=30 ),
-User(name="Daniel",surname= "Massara", email="Massara@user.com", age=43)]
+User(id= 1 , name="Agustin", surname="Di Giambatista",email="agus@gmail.com",age=28),
+User(id= 2 , name="Gian",surname="Vespa", email="Gian_Vespa@user.com", age=30 ),
+User(id= 3 , name="Daniel",surname= "Massara", email="Massara@user.com", age=43)]
 
 
-@app.get("/usersclass")
-async def usersclass():
-    return Users_list
+#Hay dos metodos fundamentales: 
+
+
+#Metodo Path:
+@app.get("/user/{id}")
+async def user(id: int):
+        users = filter(lambda user: user.id == id, Users_list)
+        try:
+                return list(users)[0]
+        except:
+                return [{"error_EN": "The User don't exits"},
+                        {"error_ES": "El Usuario que buscaste no existe"},]
+        
+
+#Metodo Query:
+@app.get("/userquey/")
+async def user(id: int):
+        users = filter(lambda user: user.id == id, Users_list)
+        try:
+                return list(users)[0]
+        except:
+                return [{"error_EN": "The User don't exits"},
+                        {"error_ES": "El Usuario que buscaste no existe"},]
+                
+
 
 
 
